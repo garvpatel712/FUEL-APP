@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Fuel - FuelUp</title>
+    <meta name="description" content="Order fuel delivery online with FuelUp.">
+    <link rel="stylesheet" href="./style/styles.css">
+    <link rel="stylesheet" href="./style/fuel-order.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Flatpickr for date/time picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <span>FuelUp</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="desktop-nav">
+                    <a href="fuel-order.html" class="nav-link active">Fuel Order</a>
+                    <a href="trackorder.html" class="nav-link" id="track-order">Track Order</a>
+                    <a href="dashboard.html" class="nav-link">Account Info</a>
+                    <button id="logout-btn" class="btn btn-outline">Log Out</button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars" id="menu-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav" id="mobile-nav">
+            <div class="container">
+                <a href="fuel-order.html" class="nav-link active">Fuel Order</a>
+                <a href="#" class="nav-link">Track Order</a>
+                <a href="dashboard.html" class="nav-link">Account Info</a>
+                <button id="mobile-logout-btn" class="btn btn-outline btn-full">Log Out</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="order-section">
+            <div class="container">
+                <h1 class="page-title">Order Fuel</h1>
+                <p class="page-subtitle">Fill in the details below to place your fuel order</p>
+                
+                <div class="order-container">
+                    <div class="order-form-container">
+                        <form id="order-form" class="order-form">
+                            <div class="form-section">
+                                <h2 class="section-title">Fuel Details</h2>
+                                
+                                <div class="form-group">
+                                    <label for="fuel-type">Fuel Type</label>
+                                    <div class="select-wrapper">
+                                        <select id="fuel-type" class="form-select" required>
+                                            <option value="" disabled selected>Select fuel type</option>
+                                            <option value="Petrol">Petrol</option>
+                                            <option value="Diesel">Diesel</option>
+                                            <option value="CNG">CNG</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down select-icon"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="quantity">Quantity (Liters)</label>
+                                    <div class="quantity-input">
+                                        <button type="button" class="quantity-btn" id="decrease-quantity">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <input type="number" id="quantity" min="5" max="1000" value="20" required>
+                                        <button type="button" class="quantity-btn" id="increase-quantity">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="fuel-price-info">
+                                    <div class="price-item">
+                                        <span>Price per liter:</span>
+                                        <span id="price-per-liter">$0.00</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span>Subtotal:</span>
+                                        <span id="subtotal">$0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-section">
+                                <h2 class="section-title">Delivery Details</h2>
+                                
+                                <div class="form-group">
+                                    <label for="address">Delivery Address</label>
+                                    <textarea id="address" class="form-textarea" rows="3" placeholder="Enter your full address" required></textarea>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="city">City</label>
+                                        <input type="text" id="city" class="form-input" placeholder="City" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="zip">ZIP Code</label>
+                                        <input type="text" id="zip" class="form-input" placeholder="ZIP Code" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="delivery-date">Delivery Date & Time</label>
+                                    <div class="input-icon-wrapper">
+                                        <i class="fas fa-calendar input-icon"></i>
+                                        <input type="text" id="delivery-date" class="form-input" placeholder="Select date and time" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="notes">Additional Notes (Optional)</label>
+                                    <textarea id="notes" class="form-textarea" rows="2" placeholder="Any special instructions for delivery"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-section">
+                                <h2 class="section-title">Payment Method</h2>
+                                
+                                <div class="payment-methods">
+                                    <div class="payment-method">
+                                        <input type="radio" name="payment" id="payment-card" value="card" checked>
+                                        <label for="payment-card">
+                                            <i class="fas fa-credit-card"></i>
+                                            <span>Credit/Debit Card</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="payment-method">
+                                        <input type="radio" name="payment" id="payment-paypal" value="paypal">
+                                        <label for="payment-paypal">
+                                            <i class="fab fa-paypal"></i>
+                                            <span>PayPal</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="payment-method">
+                                        <input type="radio" name="payment" id="payment-gpay" value="gpay">
+                                        <label for="payment-gpay">
+                                            <i class="fab fa-google-pay"></i>
+                                            <span>Google Pay</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="payment-method">
+                                        <input type="radio" name="payment" id="payment-cod" value="cod">
+                                        <label for="payment-cod">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                            <span>Cash on Delivery</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-full order-btn">
+                                Place Order
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="order-summary-container">
+                        <div class="order-summary">
+                            <h2 class="summary-title">Order Summary</h2>
+                            
+                            <div class="summary-details">
+                                <div class="summary-item">
+                                    <span>Fuel Type:</span>
+                                    <span id="summary-fuel-type">-</span>
+                                </div>
+                                
+                                <div class="summary-item">
+                                    <span>Quantity:</span>
+                                    <span id="summary-quantity">-</span>
+                                </div>
+                                
+                                <div class="summary-item">
+                                    <span>Price per liter:</span>
+                                    <span id="summary-price">-</span>
+                                </div>
+                                
+                                <div class="summary-item">
+                                    <span>Subtotal:</span>
+                                    <span id="summary-subtotal">-</span>
+                                </div>
+                                
+                                <div class="summary-item">
+                                    <span>Delivery Fee:</span>
+                                    <span id="summary-delivery-fee">$5.00</span>
+                                </div>
+                                
+                                <div class="summary-divider"></div>
+                                
+                                <div class="summary-item total">
+                                    <span>Total:</span>
+                                    <span id="summary-total">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="delivery-info">
+                                <h3>Estimated Delivery</h3>
+                                <p id="summary-delivery-date">Select a delivery date and time</p>
+                                <p id="summary-address">Enter your delivery address</p>
+                            </div>
+                            
+                            <div class="promo-code">
+                                <h3>Promo Code</h3>
+                                <div class="promo-input">
+                                    <input type="text" placeholder="Enter promo code">
+                                    <button class="btn btn-outline">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="need-help">
+                            <h3>Need Help?</h3>
+                            <p>Our customer support team is available 24/7</p>
+                            <a href="#" class="btn btn-outline btn-full">
+                                <i class="fas fa-headset"></i>
+                                Contact Support
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p class="copyright">
+                    &copy;2024 FuelUp. All rights reserved.
+                </p>
+                <div class="footer-legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Settings</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./script/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="./script/fuel-order.js"></script>
+    <script>
+        // const logoutBtn = document.getElementById("logout-btn")
+        // const mobileLogoutBtn = document.getElementById("mobile-logout-btn")
+
+        // function logout() {
+        //     console.log("Here");
+        //     localStorage.removeItem("isLoggedIn")
+        //     localStorage.removeItem("userName")
+        //     localStorage.removeItem("userEmail")
+        //     localStorage.removeItem("userPhone")
+        //     window.location.href = "signin.html"
+        // }
+        // console.log(logoutBtn); 
+        // if (logoutBtn) logoutBtn.addEventListener("click", logout)
+        // document.getElementById("track-order").addEventListener("click",()=>{
+        //     var parts=window.location.href.split("/");
+        //     window.location.href=parts.slice(0,parts.length-1).join("/")+"/trackorder.html"
+        // })
+    </script>
+</body>
+</html>
+

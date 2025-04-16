@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FuelUp - Fuel Delivery Service</title>
+    <meta name="description" content="Experience the convenience of ordering fuel online with just a few clicks.">
+    <link rel="stylesheet" href="./style/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <a href="/" class="logo">
+                    <span>FuelUp</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="desktop-nav">
+                    <a href="./fuel-order.html" class="nav-link">Fuel Order</a>
+                    <a href="./trackorder.html" class="nav-link">Track Order</a>
+                    <a href="./dashboard.html" class="nav-link">Account Info</a>
+                    <button class="btn btn-primary">Order Now</button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars" id="menu-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav" id="mobile-nav">
+            <div class="container">
+                <a href="./fuel-order.html" class="nav-link">Fuel Order</a>
+                <a href="#" class="nav-link">Track Order</a>
+                <a href="#" class="nav-link">Account Info</a>
+                <button class="btn btn-primary btn-full">Order Now</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Effortless Fuel Delivery at Your Fingertips</h1>
+                        <p class="hero-text">
+                            Experience the convenience of ordering fuel online with just a few clicks.
+                            Track your delivery in real-time and manage your account easily.
+                        </p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary">Order</button>
+                            <button class="btn btn-outline">Learn More</button>
+                        </div>
+                    </div>
+                    <div class="hero-image">
+                        <img src="https://placehold.co/600x400" alt="Fuel Delivery">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <h2 class="section-title">
+                    Discover the Future of Fuel Delivery: Fast, Reliable, and Convenient
+                </h2>
+                <p class="section-text">
+                    Our platform offers seamless fuel ordering with real-time tracking for peace
+                    of mind. Enjoy secure payment options that cater to your preferences,
+                    ensuring a hassle-free experience every time.
+                </p>
+                
+                <h3 class="sub-section-title">
+                    Explore Our Comprehensive Features for a Seamless Fuel Delivery Experience
+                </h3>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-image">
+                            <img src="https://placehold.co/300x200" alt="Real-Time Tracking">
+                        </div>
+                        <h4 class="feature-title">Stay Updated with Real-Time Notifications and Order Tracking</h4>
+                        <p class="feature-text">Access your order history anytime to manage your fuel needs efficiently.</p>
+                        <a href="#" class="feature-link">
+                            Learn More <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-image">
+                            <img src="https://placehold.co/300x200" alt="Admin Dashboard">
+                        </div>
+                        <h4 class="feature-title">Manage Your Orders with Our User-Friendly Admin Dashboard</h4>
+                        <p class="feature-text">Our admin dashboard provides complete control over orders and customer data.</p>
+                        <a href="./signin.html" class="feature-link green-link">
+                            Sign Up <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-image">
+                            <img src="https://placehold.co/300x200" alt="Instant Alerts">
+                        </div>
+                        <h4 class="feature-title">Receive Instant Alerts for Order Confirmation and Delivery Updates</h4>
+                        <p class="feature-text">Stay informed with timely notifications about your fuel orders and special offers.</p>
+                        <a href="#" class="feature-link">
+                            Learn More <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Convenience Section -->
+        <section class="convenience-section">
+            <div class="container">
+                <div class="convenience-grid">
+                    <div class="convenience-content">
+                        <h2 class="section-title">
+                            Experience Hassle-Free Fuel Delivery Today
+                        </h2>
+                        <p class="section-text">
+                            Our online fuel delivery service offers unmatched convenience and reliability. 
+                            Save time and effort with just a few clicks.
+                        </p>
+                        
+                        <div class="benefits">
+                            <div class="benefit">
+                                <div class="benefit-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="benefit-content">
+                                    <h4 class="benefit-title">Convenient Access</h4>
+                                    <p class="benefit-text">Order fuel anytime, anywhere with our user-friendly platform.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="benefit">
+                                <div class="benefit-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="benefit-content">
+                                    <h4 class="benefit-title">Dependable Service</h4>
+                                    <p class="benefit-text">Enjoy reliable deliveries right to your doorstep, every time.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="convenience-buttons">
+                            <button class="btn btn-primary">Learn More</button>
+                            <button class="btn btn-green">
+                                Sign Up <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="signup-card">
+                        <h3 class="signup-title">
+                            Join Our Fuel Delivery Service
+                        </h3>
+                        <p class="signup-text">
+                            Sign up now for quick and easy fuel delivery!
+                        </p>
+                        <div class="signup-buttons">
+                            <button class="btn btn-primary btn-full">Sign Up</button>
+                            <button class="btn btn-outline btn-full">Log In</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial Section -->
+        <section class="testimonial-section">
+            <div class="container">
+                <div class="testimonial-card">
+                    <div class="testimonial-icon">W</div>
+                    <p class="testimonial-text">
+                        "The service was exceptional! I received my fuel on time and the process was so easy to navigate."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"></div>
+                        <div class="author-info">
+                            <h4 class="author-name">John Doe</h4>
+                            <p class="author-title">CEO, FuelCorp</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <div class="container">
+                <h2 class="section-title">
+                    FAQs
+                </h2>
+                <p class="section-text">
+                    Discover how our fuel delivery service works and get answers to your common questions.
+                </p>
+                
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question" data-faq="1">
+                            How does delivery work?
+                            <i class="fas fa-plus faq-icon"></i>
+                        </div>
+                        <div class="faq-answer" id="faq-1">
+                            Our delivery service allows you to order fuel online. Once you place your order, our team will
+                            process it and dispatch a delivery driver to your location. You can track the delivery in real-time
+                            for convenience.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" data-faq="2">
+                            What payment methods are available?
+                            <i class="fas fa-plus faq-icon"></i>
+                        </div>
+                        <div class="faq-answer" id="faq-2">
+                            We offer various secure payment options including GPay, PayPal, Net Banking, UPI, and Cash on
+                            Delivery. This flexibility ensures that you can choose the method that works best for you. Your
+                            payment information is always kept safe and secure.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" data-faq="3">
+                            Can I track my order?
+                            <i class="fas fa-plus faq-icon"></i>
+                        </div>
+                        <div class="faq-answer" id="faq-3">
+                            Yes, you can track your order in real-time through our platform. An interactive map will show you
+                            the delivery progress and estimated arrival time. This feature ensures transparency and keeps
+                            you informed.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" data-faq="4">
+                            What if I have issues?
+                            <i class="fas fa-plus faq-icon"></i>
+                        </div>
+                        <div class="faq-answer" id="faq-4">
+                            If you encounter any issues, our customer support team is here to help. You can reach out via the contact
+                            button for assistance. We are committed to resolving your concerns promptly.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" data-faq="5">
+                            How to change orders?
+                            <i class="fas fa-plus faq-icon"></i>
+                        </div>
+                        <div class="faq-answer" id="faq-5">
+                            To change your order, please contact our support team as soon as possible. We will do our best
+                            to accommodate your request before the order is processed. Changes may not be possible once
+                            the delivery is en route.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subscribe Section -->
+        <section class="subscribe-section">
+            <div class="container">
+                <div class="subscribe-container">
+                    <h2 class="subscribe-title">
+                        Subscribe to Updates
+                    </h2>
+                    <p class="subscribe-text">
+                        Stay informed about our latest offers and updates.
+                    </p>
+                    
+                    <form class="subscribe-form">
+                        <input type="email" placeholder="Your Email Here" class="subscribe-input">
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                    
+                    <p class="privacy-text">
+                        By subscribing you agree to our Privacy Policy. <a href="#" class="privacy-link">Privacy Policy</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <!-- Footer Top -->
+            <div class="footer-top">
+                <!-- Logo Column -->
+                <div class="footer-column">
+                    <a href="/" class="footer-logo">
+                        <span>FuelUp</span>
+                    </a>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="footer-column">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Fuel Delivery</a></li>
+                        <li><a href="#">Track Order</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Blog Posts</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Resources -->
+                <div class="footer-column">
+                    <h3 class="footer-title">Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">User Guide</a></li>
+                        <li><a href="#">Safety Tips</a></li>
+                        <li><a href="#">Fuel Types</a></li>
+                        <li><a href="#">Delivery Areas</a></li>
+                        <li><a href="#">Customer Support</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Company Info -->
+                <div class="footer-column">
+                    <h3 class="footer-title">Company Info</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press Releases</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                        <li><a href="#">Our Partners</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Legal & Social -->
+                <div class="footer-column">
+                    <h3 class="footer-title">Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Use</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Agreement</a></li>
+                    </ul>
+                    
+                    <h3 class="footer-title">Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p class="copyright">
+                    &copy;2024 FuelUp. All rights reserved.
+                </p>
+                <div class="footer-legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Settings</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./script/script.js"></script>
+</body>
+</html>
+

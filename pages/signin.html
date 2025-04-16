@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In/Sign Up - FuelUp</title>
+    <meta name="description" content="Sign in or create an account with FuelUp fuel delivery service.">
+    <link rel="stylesheet" href="./style/styles.css">
+    <link rel="stylesheet" href="./style/auth.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <span>FuelUp</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="desktop-nav">
+                    <a href="fuel-order.html" class="nav-link">Fuel Order</a>
+                    <a href="trackorder.html" class="nav-link">Track Order</a>
+                    <a href="dashboard.html" class="nav-link">Account Info</a>
+                    <a href="signin.html" class="btn btn-primary">Sign In</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars" id="menu-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav" id="mobile-nav">
+            <div class="container">
+                <a href="fuel-order.html" class="nav-link">Fuel Order</a>
+                <a href="trackorder.html" class="nav-link">Track Order</a>
+                <a href="dashboard.html" class="nav-link">Account Info</a>
+                <a href="signin.html" class="btn btn-primary btn-full">Sign In</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="auth-section">
+            <div class="container">
+                <div class="auth-container">
+                    <div class="auth-card">
+                        <div class="auth-header">
+                            <div class="auth-tabs">
+                                <button class="auth-tab active" data-tab="signin">Sign In</button>
+                                <button class="auth-tab" data-tab="signup">Sign Up</button>
+                            </div>
+                        </div>
+                        
+                        <div class="auth-body">
+                            <!-- Sign In Form -->
+                            <form id="signin-form" class="auth-form active">
+                                <h2 class="auth-title">Welcome Back</h2>
+                                <p class="auth-subtitle">Sign in to your account to continue</p>
+                                
+                                <div class="form-group">
+                                    <label for="signin-email">Email</label>
+                                    <div class="input-icon-wrapper">
+                                        <i class="fas fa-envelope input-icon"></i>
+                                        <input type="email" id="signin-email" name="email" class="auth-input" placeholder="Your email" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="signin-password">Password</label>
+                                    <div class="input-icon-wrapper">
+                                        <i class="fas fa-lock input-icon"></i>
+                                        <input type="password" id="signin-password" name="password" class="auth-input" placeholder="Your password" required>
+                                        <i class="fas fa-eye-slash toggle-password"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group form-options">
+                                    <div class="remember-me">
+                                        <input type="checkbox" id="remember-me">
+                                        <label for="remember-me">Remember me</label>
+                                    </div>
+                                    <a href="#" class="forgot-password">Forgot Password?</a>
+                                </div>
+                                
+                                <div class="alert alert-danger" id="signin-error" style="display: none;"></div>
+                                
+                                <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+                                
+                                <div class="auth-divider">
+                                    <span>or continue with</span>
+                                </div>
+                                
+                                <div class="social-auth">
+                                    <button type="button" class="social-auth-btn">
+                                        <i class="fab fa-google"></i>
+                                        <span>Google</span>
+                                    </button>
+                                    <button type="button" class="social-auth-btn">
+                                        <i class="fab fa-facebook-f"></i>
+                                        <span>Facebook</span>
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <!-- Sign Up Form -->
+                            <form id="signup-form" class="auth-form">
+                                <h2 class="auth-title">Create Account</h2>
+                                <p class="auth-subtitle">Sign up to get started with FuelUp</p>
+                                
+                                <div class="form-group">
+                                    <label for="signup-name">Full Name</label>
+                                    <div class="input-icon-wrapper">
+                                        <i class="fas fa-user input-icon"></i>
+                                        <input type="text" id="signup-name" name="name" class="auth-input" placeholder="Your full name" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="signup-email">Email</label>
+                                    <div class="input-icon-wrapper">
+                                        <i class="fas fa-envelope input-icon"></i>
+                                        <input type="email" id="signup-email" name="email" class="auth-input" placeholder="Your email" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="signup-phone">Phone Number (Optional)</label>
+                                    <div class="input-icon-wrapper">
+                                        <i class="fas fa-phone input-icon"></i>
+                                        <input type="tel" id="signup-phone" name="phone" class="auth-input" pattern="[0-9]{10}" placeholder="Your phone number">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="signup-password">Password</label>
+                                    <div class="input-icon-wrapper">
+                                        <i class="fas fa-lock input-icon"></i>
+                                        <input type="password" id="signup-password" name="password" class="auth-input" placeholder="Create a password" required>
+                                        <i class="fas fa-eye-slash toggle-password"></i>
+                                    </div>
+                                    <div class="password-strength">
+                                        <div class="strength-meter">
+                                            <div class="strength-segment"></div>
+                                            <div class="strength-segment"></div>
+                                            <div class="strength-segment"></div>
+                                            <div class="strength-segment"></div>
+                                        </div>
+                                        <span class="strength-text">Password strength</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div class="terms-checkbox">
+                                        <input type="checkbox" id="terms" required>
+                                        <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                                    </div>
+                                </div>
+                                
+                                <div class="alert alert-danger" id="signup-error" style="display: none;"></div>
+                                
+                                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+                                
+                                <div class="auth-divider">
+                                    <span>or sign up with</span>
+                                </div>
+                                
+                                <div class="social-auth">
+                                    <button type="button" class="social-auth-btn">
+                                        <i class="fab fa-google"></i>
+                                        <span>Google</span>
+                                    </button>
+                                    <button type="button" class="social-auth-btn">
+                                        <i class="fab fa-facebook-f"></i>
+                                        <span>Facebook</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p class="copyright">
+                    &copy;2024 FuelUp. All rights reserved.
+                </p>
+                <div class="footer-legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Settings</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./script/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const authTabs = document.querySelectorAll('.auth-tab');
+            const authForms = document.querySelectorAll('.auth-form');
+            
+            authTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and forms
+                    authTabs.forEach(t => t.classList.remove('active'));
+                    authForms.forEach(f => f.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding form
+                    tab.classList.add('active');
+                    const formId = `${tab.dataset.tab}-form`;
+                    document.getElementById(formId).classList.add('active');
+                });
+            });
+            
+            // Toggle password visibility
+            const togglePasswordBtns = document.querySelectorAll('.toggle-password');
+            togglePasswordBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const input = this.parentElement.querySelector('input');
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            });
+            
+            // Handle signin form submission
+            const signinForm = document.getElementById('signin-form');
+            signinForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('signin-email').value;
+                const password = document.getElementById('signin-password').value;
+                
+                try {
+                    const response = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // Redirect to dashboard on successful login
+                        window.location.href = '/dashboard.html';
+                    } else {
+                        // Show error message
+                        const errorElement = document.getElementById('signin-error');
+                        errorElement.textContent = data.message || 'Login failed. Please try again.';
+                        errorElement.style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    const errorElement = document.getElementById('signin-error');
+                    errorElement.textContent = 'An error occurred. Please try again later.';
+                    errorElement.style.display = 'block';
+                }
+            });
+            
+            // Handle signup form submission
+            const signupForm = document.getElementById('signup-form');
+            signupForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+                const phone = document.getElementById('signup-phone').value;
+                const password = document.getElementById('signup-password').value;
+                
+                try {
+                    const response = await fetch('/api/auth/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ name, email, phone, password })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // Redirect to dashboard on successful signup
+                        window.location.href = '/dashboard.html';
+                    } else {
+                        // Show error message
+                        const errorElement = document.getElementById('signup-error');
+                        errorElement.textContent = data.message || 'Signup failed. Please try again.';
+                        errorElement.style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Signup error:', error);
+                    const errorElement = document.getElementById('signup-error');
+                    errorElement.textContent = 'An error occurred. Please try again later.';
+                    errorElement.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
