@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const User = require('../models/User');
 
 // Register new user
@@ -27,7 +29,7 @@ router.post('/signup', async (req, res) => {
 
         // Create JWT token
         const token = jwt.sign(
-            { userId: user._id },
+            { userId: user._id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
@@ -66,7 +68,7 @@ router.post('/login', async (req, res) => {
 
         // Create JWT token
         const token = jwt.sign(
-            { userId: user._id },
+            { userId: user._id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
@@ -90,14 +92,14 @@ router.post('/login', async (req, res) => {
 router.get('/check', async (req, res) => {
     try {
         const token = req.cookies.token;
-        
+
         if (!token) {
             return res.json({ authenticated: false });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.userId).select('-password');
-        
+
         if (!user) {
             return res.json({ authenticated: false });
         }
@@ -107,7 +109,8 @@ router.get('/check', async (req, res) => {
             user: {
                 id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                role: user.role
             }
         });
     } catch (error) {
@@ -126,6 +129,78 @@ router.get('/logout', (req, res) => {
         expires: new Date(0)
     });
     res.json({ message: 'Logged out successfully' });
+});
+
+// Create a transporter for sending emails
+// For Gmail, you need to use an App Password if 2FA is enabled
+// Create one at https://myaccount.google.com/apppasswords
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    },
+    tls: {
+        rejectUnauthorized: false // Helps with self-signed certificates
+    }
+});
+
+// Forgot password - direct reset without email
+router.post('/forgot-password', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Find user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Set new password
+        user.password = password;
+
+        // Clear any existing reset tokens
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+
+        await user.save();
+
+        res.json({ message: 'Password has been reset successfully' });
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Reset password
+router.post('/reset-password', async (req, res) => {
+    try {
+        const { token, password } = req.body;
+
+        // Find user by token and check if token is still valid
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
+        }
+
+        // Set new password
+        user.password = password;
+
+        // Clear reset token fields
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+
+        await user.save();
+
+        res.json({ message: 'Password has been reset successfully' });
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
 });
 
 module.exports = router; 

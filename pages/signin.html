@@ -59,13 +59,13 @@
                                 <button class="auth-tab" data-tab="signup">Sign Up</button>
                             </div>
                         </div>
-                        
+
                         <div class="auth-body">
                             <!-- Sign In Form -->
                             <form id="signin-form" class="auth-form active">
                                 <h2 class="auth-title">Welcome Back</h2>
                                 <p class="auth-subtitle">Sign in to your account to continue</p>
-                                
+
                                 <div class="form-group">
                                     <label for="signin-email">Email</label>
                                     <div class="input-icon-wrapper">
@@ -73,7 +73,7 @@
                                         <input type="email" id="signin-email" name="email" class="auth-input" placeholder="Your email" required>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="signin-password">Password</label>
                                     <div class="input-icon-wrapper">
@@ -82,23 +82,23 @@
                                         <i class="fas fa-eye-slash toggle-password"></i>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group form-options">
                                     <div class="remember-me">
                                         <input type="checkbox" id="remember-me">
                                         <label for="remember-me">Remember me</label>
                                     </div>
-                                    <a href="#" class="forgot-password">Forgot Password?</a>
+                                    <a href="forgot-password.html" class="forgot-password">Forgot Password?</a>
                                 </div>
-                                
+
                                 <div class="alert alert-danger" id="signin-error" style="display: none;"></div>
-                                
+
                                 <button type="submit" class="btn btn-primary btn-full">Sign In</button>
-                                
+
                                 <div class="auth-divider">
                                     <span>or continue with</span>
                                 </div>
-                                
+
                                 <div class="social-auth">
                                     <button type="button" class="social-auth-btn">
                                         <i class="fab fa-google"></i>
@@ -110,12 +110,12 @@
                                     </button>
                                 </div>
                             </form>
-                            
+
                             <!-- Sign Up Form -->
                             <form id="signup-form" class="auth-form">
                                 <h2 class="auth-title">Create Account</h2>
                                 <p class="auth-subtitle">Sign up to get started with FuelUp</p>
-                                
+
                                 <div class="form-group">
                                     <label for="signup-name">Full Name</label>
                                     <div class="input-icon-wrapper">
@@ -123,7 +123,7 @@
                                         <input type="text" id="signup-name" name="name" class="auth-input" placeholder="Your full name" required>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="signup-email">Email</label>
                                     <div class="input-icon-wrapper">
@@ -131,7 +131,7 @@
                                         <input type="email" id="signup-email" name="email" class="auth-input" placeholder="Your email" required>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="signup-phone">Phone Number (Optional)</label>
                                     <div class="input-icon-wrapper">
@@ -139,7 +139,7 @@
                                         <input type="tel" id="signup-phone" name="phone" class="auth-input" pattern="[0-9]{10}" placeholder="Your phone number">
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="signup-password">Password</label>
                                     <div class="input-icon-wrapper">
@@ -157,22 +157,22 @@
                                         <span class="strength-text">Password strength</span>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <div class="terms-checkbox">
                                         <input type="checkbox" id="terms" required>
                                         <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
                                     </div>
                                 </div>
-                                
+
                                 <div class="alert alert-danger" id="signup-error" style="display: none;"></div>
-                                
+
                                 <button type="submit" class="btn btn-primary btn-full">Create Account</button>
-                                
+
                                 <div class="auth-divider">
                                     <span>or sign up with</span>
                                 </div>
-                                
+
                                 <div class="social-auth">
                                     <button type="button" class="social-auth-btn">
                                         <i class="fab fa-google"></i>
@@ -214,20 +214,20 @@
             // Tab switching functionality
             const authTabs = document.querySelectorAll('.auth-tab');
             const authForms = document.querySelectorAll('.auth-form');
-            
+
             authTabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     // Remove active class from all tabs and forms
                     authTabs.forEach(t => t.classList.remove('active'));
                     authForms.forEach(f => f.classList.remove('active'));
-                    
+
                     // Add active class to clicked tab and corresponding form
                     tab.classList.add('active');
                     const formId = `${tab.dataset.tab}-form`;
                     document.getElementById(formId).classList.add('active');
                 });
             });
-            
+
             // Toggle password visibility
             const togglePasswordBtns = document.querySelectorAll('.toggle-password');
             togglePasswordBtns.forEach(btn => {
@@ -239,15 +239,15 @@
                     this.classList.toggle('fa-eye-slash');
                 });
             });
-            
+
             // Handle signin form submission
             const signinForm = document.getElementById('signin-form');
             signinForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                
+
                 const email = document.getElementById('signin-email').value;
                 const password = document.getElementById('signin-password').value;
-                
+
                 try {
                     const response = await fetch('/api/auth/login', {
                         method: 'POST',
@@ -256,9 +256,9 @@
                         },
                         body: JSON.stringify({ email, password })
                     });
-                    
+
                     const data = await response.json();
-                    
+
                     if (response.ok) {
                         // Redirect to dashboard on successful login
                         window.location.href = '/dashboard.html';
@@ -275,17 +275,17 @@
                     errorElement.style.display = 'block';
                 }
             });
-            
+
             // Handle signup form submission
             const signupForm = document.getElementById('signup-form');
             signupForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                
+
                 const name = document.getElementById('signup-name').value;
                 const email = document.getElementById('signup-email').value;
                 const phone = document.getElementById('signup-phone').value;
                 const password = document.getElementById('signup-password').value;
-                
+
                 try {
                     const response = await fetch('/api/auth/signup', {
                         method: 'POST',
@@ -294,9 +294,9 @@
                         },
                         body: JSON.stringify({ name, email, phone, password })
                     });
-                    
+
                     const data = await response.json();
-                    
+
                     if (response.ok) {
                         // Redirect to dashboard on successful signup
                         window.location.href = '/dashboard.html';
@@ -317,4 +317,3 @@
     </script>
 </body>
 </html>
-

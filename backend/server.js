@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const authRoutes = require('./routes/auth');
 const orderRoutes = require('./routes/orders');
+const adminRoutes = require('./routes/admin');
 
 // Load environment variables
 dotenv.config();
@@ -34,22 +35,34 @@ mongoose.connect(process.env.MONGODB_URI)
 // Authentication middleware
 const authMiddleware = (req, res, next) => {
     const token = req.cookies.token;
-    
+
     if (!token) {
         // Check if the request is for a protected page
-        const protectedPages = ['/dashboard.html', '/fuel-order.html', '/trackorder.html'];
+        const protectedPages = ['/dashboard.html', '/fuel-order.html', '/trackorder.html', '/admin-dashboard.html'];
         if (protectedPages.includes(req.path)) {
             return res.redirect('/signin.html');
         }
         return next();
     }
-    
+
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
+
+        // Redirect admin to admin dashboard and regular users to user dashboard
+        if (req.path === '/dashboard.html' && decoded.role === 'admin') {
+            return res.redirect('/admin-dashboard.html');
+        }
+
+        // Prevent regular users from accessing admin dashboard
+        if (req.path === '/admin-dashboard.html' && decoded.role !== 'admin') {
+            return res.redirect('/dashboard.html');
+        }
+
         next();
     } catch (error) {
         res.clearCookie('token');
+        const protectedPages = ['/dashboard.html', '/fuel-order.html', '/trackorder.html', '/admin-dashboard.html'];
         if (protectedPages.includes(req.path)) {
             return res.redirect('/signin.html');
         }
@@ -69,11 +82,12 @@ app.use('/api/orders', (req, res, next) => {
   console.log(`Order route accessed: ${req.method} ${req.path}`);
   next();
 }, orderRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Route to serve HTML files
 app.get('*.html', (req, res) => {
     const filePath = path.join(__dirname, '../pages', req.path);
-    
+
     // Check if file exists
     if (fs.existsSync(filePath)) {
         res.sendFile(filePath);

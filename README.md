@@ -5,7 +5,9 @@ A web application for ordering fuel delivery services with user authentication a
 ## Features
 
 - User authentication (signup, login, logout)
+- Role-based access control (user and admin roles)
 - Protected routes (only authenticated users can access certain pages)
+- Admin dashboard for user and order management
 - Fuel ordering system
 - Order tracking
 - User dashboard
@@ -48,6 +50,12 @@ npm install
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/fuelup
 JWT_SECRET=your-super-secret-key-change-this-in-production
+
+# Email configuration (required for password reset functionality)
+# For Gmail, you need to use an App Password if 2FA is enabled
+# Create one at https://myaccount.google.com/apppasswords
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
 ```
 
 ## Running the Application
@@ -117,10 +125,36 @@ fuelup/
 
 ## API Endpoints
 
+### Authentication
 - `POST /api/auth/signup` - Register a new user
 - `POST /api/auth/login` - Login user
 - `GET /api/auth/check` - Check authentication status
 - `GET /api/auth/logout` - Logout user
+- `POST /api/auth/forgot-password` - Direct password reset (no email verification required)
+
+### Admin (Protected Routes)
+- `GET /api/admin/users` - Get all users (admin only)
+- `GET /api/admin/users/:id` - Get user by ID (admin only)
+- `PUT /api/admin/users/:id` - Update user (admin only)
+- `DELETE /api/admin/users/:id` - Delete user (admin only)
+- `POST /api/admin/create-admin` - Create a new admin user (admin only)
+
+## Admin Setup
+
+To create the initial admin user, run the following command:
+
+```
+cd backend
+node scripts/create-admin.js
+```
+
+This will create an admin user with the following credentials:
+- Email: admin@fuelup.com
+- Password: admin123
+
+After creating the admin user, you can log in to the admin dashboard at `/admin-dashboard.html`.
+
+**Note:** For security reasons, you should change the default admin password after the first login.
 
 ## License
 
