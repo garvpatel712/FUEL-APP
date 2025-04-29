@@ -18,13 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     mobileMenuBtn.addEventListener('click', function() {
         mobileNav.classList.toggle('active');
-        if (mobileNav.classList.contains('active')) {
-            menuIcon.classList.remove('fa-bars');
-            menuIcon.classList.add('fa-times');
-        } else {
-            menuIcon.classList.remove('fa-times');
-            menuIcon.classList.add('fa-bars');
-        }
+        menuIcon.classList.toggle('fa-bars');
+        menuIcon.classList.toggle('fa-times');
     });
     
     // Initialize user modal
@@ -32,13 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeBtn = modal.querySelector('.close');
     const addUserBtn = document.getElementById('add-user-btn');
     
-    closeBtn.addEventListener('click', function() {
-        modal.style.display = 'none';
-    });
-    
+    closeBtn.addEventListener('click', closeModal);
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
-            modal.style.display = 'none';
+            closeModal();
         }
     });
     
@@ -57,14 +49,44 @@ document.addEventListener('DOMContentLoaded', function() {
     loadDashboardData();
 });
 
+// Modal functions
+function closeModal() {
+    const modal = document.getElementById('user-modal');
+    modal.style.display = 'none';
+    // Clear form
+    document.getElementById('user-form').reset();
+    document.getElementById('user-id').value = '';
+}
+
+// Show notification
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+    notification.style.display = 'block';
+    
+    // Hide after 3 seconds
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000);
+}
+
+function showError(message) {
+    showNotification(message, 'error');
+}
+
+function showSuccess(message) {
+    showNotification(message, 'success');
+}
+
 // Check if user is authenticated and is admin
-function checkAdminAuth() {
-    fetch('/api/auth/check', {
-        method: 'GET',
-        credentials: 'include'
-    })
-    .then(response => response.json())
-    .then(data => {
+async function checkAdminAuth() {
+    try {
+        const response = await fetch('/api/auth/check', {
+            credentials: 'include'
+        });
+        const data = await response.json();
+        
         if (!data.authenticated) {
             window.location.href = '/signin.html';
             return;
@@ -74,14 +96,10 @@ function checkAdminAuth() {
             window.location.href = '/dashboard.html';
             return;
         }
-        
-        // User is authenticated and is admin
-        console.log('Admin authenticated:', data.user);
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error checking authentication:', error);
         window.location.href = '/signin.html';
-    });
+    }
 }
 
 // Initialize tabs
@@ -93,28 +111,11 @@ function initTabs() {
         button.addEventListener('click', function() {
             const tabName = this.getAttribute('data-tab');
             
-            // Remove active class from all buttons and tabs
             tabButtons.forEach(btn => btn.classList.remove('active'));
             tabs.forEach(tab => tab.classList.remove('active'));
             
-            // Add active class to clicked button and corresponding tab
             this.classList.add('active');
             document.getElementById(`${tabName}-tab`).classList.add('active');
-        });
-    });
-    
-    // Handle "View All" buttons
-    const viewAllButtons = document.querySelectorAll('.btn-link[data-tab]');
-    viewAllButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const tabName = this.getAttribute('data-tab');
-            
-            // Activate the corresponding tab
-            tabButtons.forEach(btn => {
-                if (btn.getAttribute('data-tab') === tabName) {
-                    btn.click();
-                }
-            });
         });
     });
 }
@@ -122,7 +123,6 @@ function initTabs() {
 // Logout function
 function logout() {
     fetch('/api/auth/logout', {
-        method: 'GET',
         credentials: 'include'
     })
     .then(() => {
@@ -135,36 +135,25 @@ function logout() {
 
 // Load dashboard data
 function loadDashboardData() {
-    // Load users
     loadUsers();
-    
-    // Load orders (if you have an orders API)
-    // loadOrders();
-    
-    // Update dashboard stats
     updateDashboardStats();
 }
 
 // Load users
-function loadUsers() {
-    fetch('/api/admin/users', {
-        method: 'GET',
-        credentials: 'include'
-    })
-    .then(response => response.json())
-    .then(users => {
-        // Update users table
+async function loadUsers() {
+    try {
+        const response = await fetch('/api/admin/users', {
+            credentials: 'include'
+        });
+        const users = await response.json();
+        
         updateUsersTable(users);
-        
-        // Update recent users table (show only the last 5)
         updateRecentUsersTable(users.slice(0, 5));
-        
-        // Update total users count
         document.getElementById('total-users').textContent = users.length;
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error loading users:', error);
-    });
+        showError('Error loading users');
+    }
 }
 
 // Update users table
@@ -185,17 +174,9 @@ function updateUsersTable(users) {
         return;
     }
     
-    usersTable.innerHTML = '';
-    
-    users.forEach(user => {
-        const row = document.createElement('tr');
-        
-        // Format date
-        const createdDate = new Date(user.createdAt);
-        const formattedDate = createdDate.toLocaleDateString();
-        
-        row.innerHTML = `
-            <td>${user.id}</td>
+    usersTable.innerHTML = users.map(user => `
+        <tr>
+            <td>${user._id}</td>
             <td>${user.name}</td>
             <td>${user.email}</td>
             <td>${user.phone || '-'}</td>
@@ -204,33 +185,25 @@ function updateUsersTable(users) {
                     ${user.role}
                 </span>
             </td>
-            <td>${formattedDate}</td>
+            <td>${new Date(user.createdAt).toLocaleDateString()}</td>
             <td>
-                <button class="btn-link edit-user" data-id="${user.id}">
+                <button class="btn-link edit-user" data-id="${user._id}">
                     <i class="fas fa-edit"></i> Edit
                 </button>
-                <button class="btn-link text-danger delete-user" data-id="${user.id}">
+                <button class="btn-link text-danger delete-user" data-id="${user._id}">
                     <i class="fas fa-trash"></i> Delete
                 </button>
             </td>
-        `;
-        
-        usersTable.appendChild(row);
-    });
+        </tr>
+    `).join('');
     
-    // Add event listeners to edit and delete buttons
+    // Add event listeners to buttons
     document.querySelectorAll('.edit-user').forEach(button => {
-        button.addEventListener('click', function() {
-            const userId = this.getAttribute('data-id');
-            openUserModal(userId);
-        });
+        button.addEventListener('click', () => openUserModal(button.dataset.id));
     });
     
     document.querySelectorAll('.delete-user').forEach(button => {
-        button.addEventListener('click', function() {
-            const userId = this.getAttribute('data-id');
-            deleteUser(userId);
-        });
+        button.addEventListener('click', () => deleteUser(button.dataset.id));
     });
 }
 
@@ -252,17 +225,9 @@ function updateRecentUsersTable(users) {
         return;
     }
     
-    recentUsersTable.innerHTML = '';
-    
-    users.forEach(user => {
-        const row = document.createElement('tr');
-        
-        // Format date
-        const createdDate = new Date(user.createdAt);
-        const formattedDate = createdDate.toLocaleDateString();
-        
-        row.innerHTML = `
-            <td>${user.id}</td>
+    recentUsersTable.innerHTML = users.map(user => `
+        <tr>
+            <td>${user._id}</td>
             <td>${user.name}</td>
             <td>${user.email}</td>
             <td>
@@ -270,39 +235,23 @@ function updateRecentUsersTable(users) {
                     ${user.role}
                 </span>
             </td>
-            <td>${formattedDate}</td>
+            <td>${new Date(user.createdAt).toLocaleDateString()}</td>
             <td>
-                <button class="btn-link edit-user" data-id="${user.id}">
+                <button class="btn-link edit-user" data-id="${user._id}">
                     <i class="fas fa-edit"></i> Edit
                 </button>
             </td>
-        `;
-        
-        recentUsersTable.appendChild(row);
-    });
+        </tr>
+    `).join('');
     
     // Add event listeners to edit buttons
     document.querySelectorAll('.edit-user').forEach(button => {
-        button.addEventListener('click', function() {
-            const userId = this.getAttribute('data-id');
-            openUserModal(userId);
-        });
+        button.addEventListener('click', () => openUserModal(button.dataset.id));
     });
 }
 
-// Update dashboard stats
-function updateDashboardStats() {
-    // This function would update the dashboard stats based on your data
-    // For now, we'll just set some placeholder values
-    
-    // Example: Update order counts if you have an orders API
-    // document.getElementById('total-orders').textContent = orders.length;
-    // document.getElementById('pending-orders').textContent = orders.filter(o => o.status === 'pending').length;
-    // document.getElementById('completed-orders').textContent = orders.filter(o => o.status === 'delivered').length;
-}
-
 // Open user modal
-function openUserModal(userId = null) {
+async function openUserModal(userId = null) {
     const modal = document.getElementById('user-modal');
     const modalTitle = document.getElementById('modal-title');
     const userForm = document.getElementById('user-form');
@@ -310,33 +259,31 @@ function openUserModal(userId = null) {
     
     // Reset form
     userForm.reset();
+    document.getElementById('user-id').value = '';
     
     if (userId) {
-        // Edit existing user
-        modalTitle.textContent = 'Edit User';
-        passwordGroup.style.display = 'block';
-        passwordGroup.querySelector('small').textContent = 'Leave blank to keep current password';
-        
-        // Fetch user data
-        fetch(`/api/admin/users/${userId}`, {
-            method: 'GET',
-            credentials: 'include'
-        })
-        .then(response => response.json())
-        .then(user => {
-            document.getElementById('user-id').value = user.id;
+        try {
+            modalTitle.textContent = 'Edit User';
+            passwordGroup.style.display = 'block';
+            passwordGroup.querySelector('small').textContent = 'Leave blank to keep current password';
+            
+            const response = await fetch(`/api/admin/users/${userId}`, {
+                credentials: 'include'
+            });
+            const user = await response.json();
+            
+            document.getElementById('user-id').value = user._id;
             document.getElementById('user-name').value = user.name;
             document.getElementById('user-email').value = user.email;
             document.getElementById('user-phone').value = user.phone || '';
             document.getElementById('user-role').value = user.role;
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Error fetching user:', error);
-        });
+            showError('Error loading user data');
+            return;
+        }
     } else {
-        // Add new user
         modalTitle.textContent = 'Add New User';
-        document.getElementById('user-id').value = '';
         passwordGroup.style.display = 'block';
         passwordGroup.querySelector('small').textContent = 'Password is required for new users';
     }
@@ -345,82 +292,80 @@ function openUserModal(userId = null) {
 }
 
 // Save user
-function saveUser() {
+async function saveUser() {
     const userId = document.getElementById('user-id').value;
-    const name = document.getElementById('user-name').value;
-    const email = document.getElementById('user-email').value;
-    const phone = document.getElementById('user-phone').value;
-    const role = document.getElementById('user-role').value;
-    const password = document.getElementById('user-password').value;
-    
     const userData = {
-        name,
-        email,
-        phone,
-        role
+        name: document.getElementById('user-name').value,
+        email: document.getElementById('user-email').value,
+        phone: document.getElementById('user-phone').value,
+        role: document.getElementById('user-role').value,
+        password: document.getElementById('user-password').value
     };
     
-    if (password) {
-        userData.password = password;
-    }
-    
-    if (userId) {
-        // Update existing user
-        fetch(`/api/admin/users/${userId}`, {
-            method: 'PUT',
+    try {
+        const url = userId 
+            ? `/api/admin/users/${userId}`
+            : '/api/admin/users';
+            
+        const method = userId ? 'PUT' : 'POST';
+        
+        // Remove password if it's empty on edit
+        if (userId && !userData.password) {
+            delete userData.password;
+        }
+        
+        const response = await fetch(url, {
+            method,
             headers: {
                 'Content-Type': 'application/json'
             },
             credentials: 'include',
             body: JSON.stringify(userData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('User updated:', data);
-            document.getElementById('user-modal').style.display = 'none';
-            loadUsers();
-        })
-        .catch(error => {
-            console.error('Error updating user:', error);
         });
-    } else {
-        // Create new user
-        fetch('/api/admin/create-admin', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify(userData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('User created:', data);
-            document.getElementById('user-modal').style.display = 'none';
-            loadUsers();
-        })
-        .catch(error => {
-            console.error('Error creating user:', error);
-        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Error saving user');
+        }
+        
+        showSuccess(data.message || 'User saved successfully');
+        closeModal();
+        loadUsers();
+    } catch (error) {
+        console.error('Error saving user:', error);
+        showError(error.message || 'Error saving user');
     }
 }
 
 // Delete user
-function deleteUser(userId) {
+async function deleteUser(userId) {
     if (!confirm('Are you sure you want to delete this user?')) {
         return;
     }
     
-    fetch(`/api/admin/users/${userId}`, {
-        method: 'DELETE',
-        credentials: 'include'
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('User deleted:', data);
+    try {
+        const response = await fetch(`/api/admin/users/${userId}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Error deleting user');
+        }
+        
+        showSuccess(data.message || 'User deleted successfully');
         loadUsers();
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error deleting user:', error);
-    });
+        showError(error.message || 'Error deleting user');
+    }
+}
+
+// Update dashboard stats
+function updateDashboardStats() {
+    // This will be called by loadDashboardData
+    // Stats are already updated by loadUsers for the users count
 }
