@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const adminAuth = require('../middleware/adminAuth');
 const mongoose = require('mongoose');
+const Order = require('../models/Order');
 
 // Get all users (admin only)
 router.get('/users', adminAuth, async (req, res) => {
@@ -139,11 +140,64 @@ router.delete('/users/:id', adminAuth, async (req, res) => {
                 return res.status(400).json({ message: 'Cannot delete the last admin user' });
             }
         }
-
-        await user.delete();
+        await user.deleteOne();
         res.json({ message: 'User deleted successfully' });
     } catch (error) {
         console.error('Error deleting user:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get all orders (admin only)
+router.get('/orders', adminAuth, async (req, res) => {
+    try {
+        const orders = await Order.find({}).populate('user', 'name email').sort({ createdAt: -1 });
+        res.json(orders);
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update order status (admin only)
+router.put('/orders/:id', adminAuth, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!['Pending', 'Confirmed', 'Processing', 'Out for Delivery', 'Delivered', 'Cancelled'].includes(status)) {
+            return res.status(400).json({ message: 'Invalid status value' });
+        }
+
+        const order = await Order.findById(id);
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        order.status = status;
+        await order.save();
+
+        res.json({ message: 'Order updated successfully', order });
+    } catch (error) {
+        console.error('Error updating order:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Delete an order (admin only)
+router.delete('/orders/:id', adminAuth, async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const order = await Order.findById(id);
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        await order.delete();
+        res.json({ message: 'Order deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting order:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });

@@ -47,6 +47,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load dashboard data
     loadDashboardData();
+
+    // Load orders
+    loadOrders();
 });
 
 // Modal functions
@@ -365,7 +368,149 @@ async function deleteUser(userId) {
 }
 
 // Update dashboard stats
-function updateDashboardStats() {
-    // This will be called by loadDashboardData
-    // Stats are already updated by loadUsers for the users count
+async function updateDashboardStats() {
+    try {
+        const response = await fetch('/api/admin/orders', {
+            credentials: 'include'
+        });
+        const orders = await response.json();
+
+        // Calculate stats
+        const totalOrders = orders.length;
+        const pendingOrders = orders.filter(order => 
+            ['Pending', 'Confirmed', 'Processing', 'Out for Delivery'].includes(order.status)
+        ).length;
+        const completedOrders = orders.filter(order => order.status === 'Delivered').length;
+
+        // Update the DOM
+        document.getElementById('total-orders').textContent = totalOrders;
+        document.getElementById('pending-orders').textContent = pendingOrders;
+        document.getElementById('completed-orders').textContent = completedOrders;
+    } catch (error) {
+        console.error('Error updating dashboard stats:', error);
+        showError('Error updating dashboard stats');
+    }
+}
+
+// Load orders
+async function loadOrders() {
+    try {
+        const response = await fetch('/api/admin/orders', {
+            credentials: 'include'
+        });
+        const orders = await response.json();
+
+        updateOrdersTable(orders);
+    } catch (error) {
+        console.error('Error loading orders:', error);
+        showError('Error loading orders');
+    }
+}
+
+// Update orders table
+function updateOrdersTable(orders) {
+    const ordersTable = document.getElementById('orders-table');
+
+    if (orders.length === 0) {
+        ordersTable.innerHTML = `
+            <tr class="empty-state">
+                <td colspan="7">
+                    <div class="empty-state-content">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>No orders found</p>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    ordersTable.innerHTML = orders.map(order => `
+        <tr>
+            <td>${order.orderNumber}</td>
+            <td>${order.user ? order.user.name : 'N/A'}</td>
+            <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+            <td>${order.fuelType}</td>
+            <td>${order.quantity} L</td>
+            <td>
+                <span class="status-badge status-${order.status.toLowerCase().replace(/ /g, '-')}">
+                    ${order.status}
+                </span>
+            </td>
+            <td>
+                ${order.status !== 'Cancelled' ? `<button class="btn-link" onclick="updateOrderStatus('${order._id}', 'Delivered')">Mark as Delivered</button>` : ''}
+                <button class="btn-link text-danger" onclick="deleteOrder('${order._id}')">Delete</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Update order status
+async function updateOrderStatus(orderId, status) {
+    try {
+        // Fetch the current order details to check its status
+        const orderResponse = await fetch(`/api/admin/orders/${orderId}`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        const orderData = await orderResponse.json();
+
+        if (!orderResponse.ok) {
+            throw new Error(orderData.message || 'Error fetching order details');
+        }
+
+        // Prevent updating to Delivered if the order is Cancelled
+        if (orderData.status === 'Cancelled' && status === 'Delivered') {
+            showError('Cannot mark a cancelled order as delivered');
+            return;
+        }
+
+        const response = await fetch(`/api/admin/orders/${orderId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ status })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Error updating order status');
+        }
+
+        showSuccess('Order status updated successfully');
+        loadOrders();
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        showError('Error updating order status');
+    }
+}
+
+// Delete order
+async function deleteOrder(orderId) {
+    if (!confirm('Are you sure you want to delete this order?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/admin/orders/${orderId}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Error deleting order');
+        }
+
+        showSuccess('Order deleted successfully');
+        loadOrders();
+    } catch (error) {
+        console.error('Error deleting order:', error);
+        showError('Error deleting order');
+    }
 }
